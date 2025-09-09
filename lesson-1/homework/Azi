@@ -1,0 +1,39 @@
+from graphviz import Digraph
+
+# Create the organizational structure diagram
+dot = Digraph("CustomerCareStructure", format="png")
+dot.attr(rankdir="TB", size="10")
+
+# Main department
+dot.node("main", "🚛 G'amxo'rlik bo'limi\n(Customer Care / After-Sales Department)", shape="box", style="filled", fillcolor="lightblue")
+
+# Level 1
+dot.node("rahbar", "Bo'lim rahbariyati\n- Director\n- Supervisor", shape="box")
+dot.edge("main", "rahbar")
+
+dot.node("aloqa", "Mijozlar bilan aloqa\n(Customer Support)", shape="box")
+dot.edge("main", "aloqa")
+
+dot.node("servis", "Texnik yordam va servis\n(Technical Support & Service)", shape="box")
+dot.edge("main", "servis")
+
+dot.node("qismlar", "Ehtiyot qismlar ta'minoti\n(Spare Parts & Logistics)", shape="box")
+dot.edge("main", "qismlar")
+
+dot.node("monitoring", "Monitoring va sifat nazorati\n(Quality & Monitoring)", shape="box")
+dot.edge("main", "monitoring")
+
+dot.node("moliya", "Moliya va hujjatlar\n(Finance & Documentation)", shape="box")
+dot.edge("main", "moliya")
+
+dot.node("trening", "Trening va rivojlanish\n(Training & Development)", shape="box")
+dot.edge("main", "trening")
+
+dot.node("it", "IT va avtomatlashtirish\n(IT & Automation)", shape="box")
+dot.edge("main", "it")
+
+# Save the diagram
+file_path = "/mnt/data/customer_care_structure"
+dot.render(file_path, format="png", cleanup=True)
+
+file_path + ".png"
