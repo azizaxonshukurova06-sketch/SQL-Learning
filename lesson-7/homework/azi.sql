@@ -1,187 +1,155 @@
-Aggregate Functions & HAVING
+--Easy-Level Tasks (10)
+SELECT MIN(Price) AS MinPrice
+FROM Products;
 
-1 MIN va MAX
+SELECT MAX(Salary) AS MaxSalary
+FROM Employees;
 
-MIN() – eng kichik qiymatni qaytaradi.
+SELECT COUNT(*) AS TotalCustomers
+FROM Customers;
 
-MAX() – eng katta qiymatni qaytaradi.
+SELECT COUNT(DISTINCT Category) AS UniqueCategories
+FROM Products;
 
-Sonlarda eng katta/eng kichik qiymatni, matnda esa alifbo tartibidagi eng birinchi va oxirgi qiymatni beradi.
-
-
-Real hayotda foydasi:
-
-Eng katta va eng kichik narxni topish (masalan, bozorda eng qimmat mahsulotni aniqlash).
-
-Eng qadimgi va eng so‘nggi sana (recordlarni) topish.
-
-drop table Products
-
-CREATE TABLE Products (
-    ProductID INT,
-    ProductName VARCHAR(50),
-    Price DECIMAL(10,2)
-);
-
-INSERT INTO Products VALUES 
-(1, 'Laptop', 800),
-(2, 'Phone', 500),
-(3, 'Tablet', 300),
-(4, 'Camera', 450);
-
-select * from Products
-
-select max(price) as maxprice, min(price) as minprice from Products
-
-SELECT MIN(ProductName) AS FirstProduct, MAX(ProductName) AS LastProduct FROM Products;
-select * from Products
-
-2 COUNT
-
-Teoriya:
-
-COUNT(*) → barcha qatorlarni sanaydi (NULL bo‘lsa ham).
-
-COUNT(column) → faqat NULL bo‘lmagan qiymatlarni sanaydi.
-
-COUNT(DISTINCT column) → faqat unikal qiymatlarni sanaydi.
- 
- drop table Employees
-
-
-CREATE TABLE Employees (
-    EmpID INT,
-    Name VARCHAR(50),
-    Department VARCHAR(50),
-    Salary DECIMAL(10,2)
-);
-
-INSERT INTO Employees VALUES
-(1, 'John', 'HR', 50000),
-(2, 'Mary', 'IT', 70000),
-(3, 'Steve', 'IT', NULL),
-(4, 'Sara', 'Finance', 60000),
-(5, 'Mike', 'HR', 55000);
-
-select * from Employees
-
-SELECT COUNT(*) AS TotalEmployees FROM Employees;
-
-
-SELECT COUNT(Department) AS EmployeesWithSalary FROM Employees;
-
-SELECT COUNT(DISTINCT Department) AS UniqueDepartments FROM Employees;
-
-SELECT COUNT(*) AS IT_Employees FROM Employees WHERE Department = 'IT';
-select * from Employees
-
-Real hayotda foydasi:
-
-Xodimlar soni, buyurtmalar soni, mijozlar sonini hisoblash.
-
-Bir xil qiymatlarni sanash.
-
-
-                           AVG (Average)
-
-Teoriya:
-
-AVG() – o‘rtacha qiymatni hisoblaydi.
-
-DISTINCT bilan faqat noyob qiymatlarni oladi.
-
-NULL qiymatlar hisobga olinmaydi.
-
-
-select * from Employees
-
-SELECT AVG(Salary) AS AvgSalary FROM Employees;
-
-SELECT AVG(DISTINCT Salary) AS AvgUniqueSalary FROM Employees;
-
-Real hayotda foydasi:
-
-O‘rtacha maoshni topish.
-
-O‘rtacha xarajat yoki o‘rtacha sotuv summasini topish.
-
-                               4SUM
-Teoriya:
-
-SUM() – umumiy yig‘indini hisoblaydi.
-
-Ko‘pincha GROUP BY bilan ishlatiladi.
-
-Real hayotda foydasi:
-
-Jami savdoni hisoblash.
-
-Oy bo‘yicha sotuvlarni chiqarish.
-
-Mahsulot bo‘yicha umumiy tushumni hisoblash.
-
-drop table Sales
-CREATE TABLE Sales (
-    SaleID INT,
-    ProductName VARCHAR(50),
-    Quantity INT,
-    Price DECIMAL(10,2)
-);
-
-INSERT INTO Sales VALUES
-(1, 'Laptop', 2, 800),
-(2, 'Phone', 3, 500),
-(3, 'Laptop', 1, 800),
-(4, 'Tablet', 5, 300),
-(5, 'Phone', 2, 500);
-select * from Sales
-
-SELECT SUM(Quantity * Price) AS TotalRevenue FROM Sales;
-
-SELECT ProductName, SUM(Quantity * Price) AS TotalRevenue
+SELECT 
+    ProductID,
+    SUM(Quantity * Price) AS TotalSalesAmount
 FROM Sales
-GROUP BY ProductName;
-select * from Sales
+WHERE ProductID = 7
+GROUP BY ProductID;
 
-                             GROUP BY
-Teoriya:
+SELECT AVG(Age) AS AverageAge
+FROM Employees;
 
-GROUP BY → ma’lumotlarni guruhlash uchun ishlatiladi.
-
-Har bir guruh uchun aggregate function ishlatadi.
-
-select * from Employees
-
-SELECT Department, AVG(Salary) AS AvgSalary
+SELECT 
+    DepartmentName,
+    COUNT(*) AS EmployeeCount
 FROM Employees
-GROUP BY Department;
+GROUP BY DepartmentName;
 
+SELECT 
+    Category,
+    MIN(Price) AS MinPrice,
+    MAX(Price) AS MaxPrice
+FROM Products
+GROUP BY Category;
 
-SELECT ProductName, SUM(Quantity * Price) AS TotalRevenue
+SELECT 
+    CustomerID,
+    SUM(Quantity * Price) AS TotalSales
 FROM Sales
-GROUP BY ProductName;
+GROUP BY CustomerID;
 
-                                   6  HAVING
-
-Teoriya:
-
-HAVING – GROUP BY natijalarini filtrlash uchun ishlatiladi.
-
-WHERE qatorlarga, HAVING esa guruhlarga qo‘llanadi.
-
-
-select * from Employees
-
-SELECT Department, COUNT(*) AS EmployeeCount
+SELECT DeptID, COUNT(*) AS EmployeeCount
 FROM Employees
+GROUP BY DeptID
+HAVING COUNT(*) > 5;
 
-GROUP BY Department
+ --Medium-Level Tasks (9)
 
-HAVING COUNT(*) > 1;
-
-select * from Sales
-
-SELECT ProductName, SUM(Quantity * Price) AS TotalRevenue
+ SELECT 
+    Category,
+    SUM(SaleAmount) AS TotalSales,
+    AVG(SaleAmount) AS AverageSales
 FROM Sales
-GROUP BY ProductName
+GROUP BY Category;
+
+
+SELECT COUNT(*) AS HR_EmployeesCount
+FROM Employees
+WHERE DepartmentName = 'HR';
+
+SELECT DeptID, 
+       MIN(Salary) AS LowestSalary, 
+       MAX(Salary) AS HighestSalary
+FROM Employees
+GROUP BY DeptID;
+
+SELECT DeptID, 
+       AVG(Salary) AS AverageSalary
+FROM Employees
+GROUP BY DeptID;
+
+SELECT DeptID, 
+       AVG(Salary) AS AverageSalary, 
+       COUNT(*) AS EmployeeCount
+FROM Employees
+GROUP BY DeptID;
+
+SELECT Category, 
+       AVG(Price) AS AveragePrice
+FROM Products
+GROUP BY Category
+HAVING AVG(Price) > 400;
+
+SELECT YEAR(SaleDate) AS SalesYear,
+       SUM(Amount) AS TotalSales
+FROM Sales
+GROUP BY YEAR(SaleDate)
+ORDER BY SalesYear;
+
+SELECT CustomerID, 
+       COUNT(OrderID) AS OrderCount
+FROM Sales
+GROUP BY CustomerID
+HAVING COUNT(OrderID) >= 3;
+
+SELECT DeptID, 
+       AVG(Salary) AS AvgSalary
+FROM Employees
+GROUP BY DeptID
+HAVING AVG(Salary) > 60000;
+
+--Hard-Level Tasks (6)
+
+SELECT Category, 
+       AVG(Price) AS AvgPrice
+FROM Products
+GROUP BY Category
+HAVING AVG(Price) > 150;
+
+SELECT CustomerID, 
+       SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY CustomerID
+HAVING SUM(SaleAmount) > 1500;
+
+SELECT DepartmentID, 
+       SUM(Salary) AS TotalSalary,
+       AVG(Salary) AS AverageSalary
+FROM Employees
+GROUP BY DepartmentID
+HAVING AVG(Salary) > 65000;
+
+SELECT 
+    CustomerID,
+    SUM(Freight) AS TotalFreightOver50,
+    MIN(Freight) AS LeastPurchase
+FROM Sales.Orders
+WHERE Freight > 50
+GROUP BY CustomerID;
+
+SELECT 
+    YEAR(o.OrderDate) AS OrderYear,
+    MONTH(o.OrderDate) AS OrderMonth,
+    SUM(od.UnitPrice * od.Quantity) AS TotalSales,
+    COUNT(DISTINCT od.ProductID) AS UniqueProducts
+FROM Sales.Orders o
+JOIN Sales.OrderDetails od 
+    ON o.OrderID = od.OrderID
+GROUP BY YEAR(o.OrderDate), MONTH(o.OrderDate)
+HAVING COUNT(DISTINCT od.ProductID) >= 2
+ORDER BY OrderYear, OrderMonth;
+
+
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,                 -- Unique ID for each order
+    CustomerID INT,                          -- Links to Customers table
+    ProductID INT,                           -- Links to Products table
+    OrderDate DATE,                          -- When the order was placed
+    Quantity INT,                            -- How many products ordered
+    TotalAmount DECIMAL(10, 2),              -- Total order value
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
 HAVING SUM(Quantity * Price) > 1000;
