@@ -1,53 +1,87 @@
-CREATE TABLE numbers2 (number INT);
-INSERT INTO numbers2 VALUES (2), (3), (6), (7);
+--Easy-Level Tasks
 
-select * from numbers2
+SELECT ProductName AS Name 
+FROM Products
 
-SELECT number,       
-CASE 
-WHEN  number %6 = 0 THEN'hi bye'
-when number %3 = 0 THEN 'bye'
-WHEN number %2 = 0 THEN 'hi'
-ELSE 'NULL'
-END AS Result 
-From numbers2;
+SELECT *
+FROM Customers AS Client;
 
-CREATE TABLE friendss (col1 VARCHAR(20), col2 VARCHAR(20));
-INSERT INTO friendss VALUES ('John', 'Bob'), ('Bob', 'Rich'), ('Ann', 'John'), ('Ann', 'Rob');
+SELECT ProductName
+FROM Products
+UNION
+SELECT ProductName
+FROM Products_Discounted;
 
-SELECT * FROM friendss
+SELECT DISTINCT CustomerName, Country
+FROM Customers;
 
-SELECT col1 AS Friend, COUNT(col2) AS Dostlar_soni
-FROM friendss
-GROUP BY col1;
+SELECT ProductName,
+       Price,
+       CASE 
+           WHEN Price > 1000 THEN 'High'
+           ELSE 'Low'
+       END AS PriceCategory
+FROM Products;
 
-CREATE TABLE Students (
-    StudentID INT,
-    FullName VARCHAR(50),
-    Score INT
-);
+SELECT ProductName,
+       StockQuantity,
+       IIF(StockQuantity > 100, 'Yes', 'No') AS InStock
+FROM Products_Discounted;
 
-INSERT INTO Students VALUES
-(1, 'Ali Karimov', 95),
-(2, 'Nodira Akhmedova', 82),
-(3, 'Javohir Sobirov', 73),
-(4, 'Dilnoza Rasulova', 59),
-(5, 'Sardorbek Tursunov', 40),
-(6, 'Bobur Usmonov', 0);
 
-SELECT * FROM Students
+--Medium-Level Tasks
 
-select Score, FullName,
- CASE 
-WHEN score >= 90 then  'A (Excelent)' 
-when score >= 75 then 'B (Good_)' 
-when score >= 60 then 'C (Avarage)'
-when score >= 40 then 'F (Pass)'
-else 'fale'
-END AS Grade 
-FROM Students
+SELECT ProductName
+FROM Products
+UNION
+SELECT ProductName
+FROM Products_Discounted;
 
-SELECT Score, FullName,
-       IIF(Score < 50, 'Need Improvement', 'Pass') AS Grade
-FROM Students;
+
+SELECT ProductName
+FROM Products
+EXCEPT
+SELECT ProductName
+FROM Products_Discounted;
+
+SELECT ProductName,
+       Price,
+       IIF(Price > 1000, 'Expensive', 'Affordable') AS PriceCategory
+FROM Products;
+
+SELECT *
+FROM Employees
+WHERE Age < 25
+   OR Salary > 60000;
+
+UPDATE Employees
+SET Salary = Salary * 1.10
+WHERE Department = 'HR'
+   OR EmployeeID = 5;
+
+   --Hard-Level Tasks
+
+   SELECT SaleID,
+       SaleAmount,
+       CASE
+           WHEN SaleAmount > 500 THEN 'Top Tier'
+           WHEN SaleAmount BETWEEN 200 AND 500 THEN 'Mid Tier'
+           ELSE 'Low Tier'
+       END AS SaleCategory
+FROM Sales;
+
+SELECT CustomerID
+FROM Orders
+EXCEPT
+SELECT CustomerID
+FROM Sales;
+
+SELECT CustomerID,
+       Quantity,
+       CASE
+           WHEN Quantity = 1 THEN '3%'
+           WHEN Quantity BETWEEN 2 AND 3 THEN '5%'
+           ELSE '7%'
+       END AS DiscountPercentage
+FROM Orders;
 
